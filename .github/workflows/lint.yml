@@ -1,0 +1,14 @@
+on: ['pull_request', 'push']
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - run: |
+         python -m pip install --upgrade pip
+         pip install -r requirements.txt &>/dev/null || true
+         pip install pylint
+      - run: git ls-files '*.py' | xargs -r pylint --output-format=github --exit-zero
